@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أداة تحويل العزم وحساب العزم</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            width: 100%;
+        }
+        main {
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+            margin: 20px;
+        }
+        .form-container {
+            width: 60%;
+        }
+        .sidebar {
+            width: 35%;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="number"], input[type="text"], select {
+            padding: 8px;
+            width: 100%;
+            margin-bottom: 10px;
+            margin-top: 5px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+            font-size: 16px;
+        }
+        .result {
+            margin-top: 20px;
+            background-color: #e2e2e2;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .notes {
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .convert-box {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        .sidebar h3, .sidebar ul {
+            margin: 10px 0;
+        }
+        .sidebar ul {
+            padding-left: 20px;
+        }
+        .sidebar ul li {
+            margin-bottom: 5px;
+        }
+        .alert {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>أداة تحويل العزم وحساب العزم</h1>
+    </header>
+
+    <main>
+        <div class="form-container">
+            <div class="section">
+                <h2>أداة تحويل العزم</h2>
+                <label for="torqueKgCm">العزم (كجم.سم):</label>
+                <input type="number" id="torqueKgCm" placeholder="ادخل العزم بوحدة كجم.سم" value="21" step="any">
+                <button class="button" onclick="convertToNm()">تحويل إلى نيوتن متر</button>
+                <p id="torqueKgCmResult"></p>
+
+                <label for="torqueNcm">العزم (نيوتن سم):</label>
+                <input type="number" id="torqueNcm" placeholder="ادخل العزم بوحدة نيوتن سم" step="any">
+                <button class="button" onclick="convertToNcm()">تحويل إلى نيوتن متر</button>
+                <p id="torqueNcmResult"></p>
+            </div>
+
+            <div class="section">
+                <h2>حساب العزم عند سرعة معينة</h2>
+                <label for="torqueLowSpeed">العزم عند السرعة المنخفضة (نيوتن متر):</label>
+                <input type="number" id="torqueLowSpeed" value="2.058" step="any" placeholder="ادخل العزم عند السرعة المنخفضة (نيوتن متر)">
+
+                <label for="lowSpeedRPM">السرعة المنخفضة (RPM):</label>
+                <input type="number" id="lowSpeedRPM" value="6" step="any" placeholder="ادخل السرعة المنخفضة (RPM)">
+
+                <label for="highSpeedRPM">السرعة المطلوبة (RPM):</label>
+                <input type="number" id="highSpeedRPM" value="178" step="any" placeholder="ادخل السرعة المطلوبة (RPM)">
+
+                <button class="button" onclick="calculateTorqueAtHighSpeed()">حساب العزم عند السرعة المطلوبة</button>
+                <p id="torqueAtHighSpeedResult"></p>
+            </div>
+
+            <div class="notes">
+                <h3>ملاحظات:</h3>
+                <p><strong>1. تحويل العزم من كجم.سم إلى نيوتن متر:</strong></p>
+                <p>العزم بوحدة كجم.سم يعني أن القوة المؤثرة (بمقدار 10 كجم) تطبق على مسافة (10 سم) من المحور. لتحويل العزم من **كجم.سم** إلى **نيوتن متر**، يمكنك ضرب القيمة في 0.098:</p>
+                <pre>العزم بالنيوتن متر = العزم بالكجم.سم × 0.098</pre>
+                <p>على سبيل المثال، إذا كان العزم 21 كجم.سم، يتم تحويله إلى نيوتن متر كما يلي:</p>
+                <pre>21 كجم.سم × 0.098 = 2.058 نيوتن متر</pre>
+
+                <p><strong>2. حساب العزم عند سرعة معينة:</strong></p>
+                <p>عند حساب العزم عند سرعات مختلفة، نستخدم المعادلة التالية:</p>
+                <pre>العزم عند السرعة العالية = العزم عند السرعة المنخفضة × (السرعة المنخفضة / السرعة العالية)</pre>
+                <p>إذا كنت تعرف العزم عند سرعة منخفضة (مثل 6 RPM) وتريد حساب العزم عند سرعة أعلى (مثل 178 RPM)، يمكنك استخدام المعادلة السابقة للحصول على العزم عند السرعة الجديدة.</p>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <h3>المعادلات المستخدمة</h3>
+            <ul>
+                <li><b>الوزن الكلي المراد رفعه:</b> 
+                    <p>الوزن الكلي الذي يجب رفعه يشمل الوزن الظاهري للشبك في الماء (وزن الشبك بعد خصم قوة الطفو) بالإضافة إلى الوزن الإضافي الموضوع فوق الشبك.</p>
+                    <p><strong>المعادلة:</strong> الوزن الكلي = الوزن الظاهري + الوزن الإضافي × 9.81</p>
+                </li>
+
+                <li><b>السرعة الخطية:</b>
+                    <p>السرعة الخطية هي السرعة التي يجب أن يتحرك بها الحبل أو السلك لرفع الشبك عبر المسافة المحددة خلال الزمن المطلوب.</p>
+                    <p><strong>المعادلة:</strong> السرعة = المسافة ÷ الزمن</p>
+                </li>
+
+                <li><b>محيط البكرة:</b>
+                    <p>محيط البكرة هو المسافة التي يتحرك بها الحبل أو السلك في كل دورة كاملة للبكرة.</p>
+                    <p><strong>المعادلة:</strong> المحيط = π × القطر</p>
+                </li>
+
+                <li><b>عدد الدورات:</b>
+                    <p>عدد الدورات المطلوبة للبكرة لرفع الشبك المسافة المطلوبة. يعتمد على المسافة التي تريد رفعها وحجم البكرة.</p>
+                    <p><strong>المعادلة:</strong> عدد الدورات = المسافة ÷ محيط البكرة</p>
+                </li>
+
+                <li><b>RPM (دورات في الدقيقة):</b>
+                    <p>RPM هو عدد الدورات في الدقيقة التي يجب أن يقوم بها الموتور لرفع الشبك بالسرعة المطلوبة.</p>
+                    <p><strong>المعادلة:</strong> RPM = (عدد الدورات ÷ الزمن) × 60</p>
+                </li>
+
+                <li><b>العزم:</b>
+                    <p>العزم هو القوة المؤثرة على البكرة والتي تعتمد على الوزن الكلي المراد رفعه ونصف قطر البكرة.</p>
+                    <p><strong>المعادلة:</strong> العزم = القوة × نصف القطر</p>
+                </li>
+            </ul>
+        </div>
+    </main>
+
+    <script>
+        // تحويل من كجم.سم إلى نيوتن متر
+        function convertToNm() {
+            const torqueKgCm = parseFloat(document.getElementById("torqueKgCm").value);
+            const torqueNm = torqueKgCm * 0.098;
+            document.getElementById("torqueKgCmResult").innerText = `${torqueKgCm} كجم.سم = ${torqueNm.toFixed(2)} نيوتن متر`;
+        }
+
+        // تحويل من نيوتن سم إلى نيوتن متر
+        function convertToNcm() {
+            const torqueNcm = parseFloat(document.getElementById("torqueNcm").value);
+            const torqueNm = torqueNcm / 100;
+            document.getElementById("torqueNcmResult").innerText = `${torqueNcm} نيوتن سم = ${torqueNm.toFixed(2)} نيوتن متر`;
+        }
+
+        // حساب العزم عند السرعة المطلوبة
+        function calculateTorqueAtHighSpeed() {
+            const torqueLowSpeed = parseFloat(document.getElementById("torqueLowSpeed").value); // العزم عند السرعة المنخفضة
+            const lowSpeedRPM = parseFloat(document.getElementById("lowSpeedRPM").value); // السرعة المنخفضة
+            const highSpeedRPM = parseFloat(document.getElementById("highSpeedRPM").value); // السرعة المطلوبة
+
+            // حساب العزم عند السرعة المطلوبة
+            const torqueAtHighSpeed = torqueLowSpeed * (lowSpeedRPM / highSpeedRPM);
+            document.getElementById("torqueAtHighSpeedResult").innerText = `العزم عند السرعة ${highSpeedRPM} RPM هو ${torqueAtHighSpeed.toFixed(4)} نيوتن متر`;
+        }
+    </script>
+
+</body>
+</html>

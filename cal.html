@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>حاسبة المحرك والبكرة</title>
+  <style>
+    body { font-family: Arial; padding: 20px; line-height: 1.8; background: #f4f4f4; }
+    h1, h2 { color: #333; }
+    input { padding: 5px; margin: 5px 0; width: 100%; }
+    .section { background: #fff; padding: 15px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 0 5px #ccc; }
+    label { font-weight: bold; }
+    .result { background: #e7f5ff; padding: 10px; margin-top: 10px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <h1>برنامج تبسيطي لحسابات المحرك والبكرة</h1>
+
+  <div class="section">
+    <h2>الشرح التوضيحي</h2>
+    <p><strong>البكرة:</strong> هي قطعة دائرية مثبتة على محور المحرك يُلف حولها الحبل. نصف قطرها يؤثر على السرعة والعزم.</p>
+    <p><strong>RPM:</strong> عدد الدورات التي يدورها المحرك في الدقيقة. كلما زاد RPM زادت السرعة ولكن قلّ العزم.</p>
+    <p><strong>Torque (العزم):</strong> القوة اللازمة لتدوير الحمل. كلما زاد الحمل أو صغُر نصف قطر البكرة، زاد العزم المطلوب.</p>
+    <p><strong>البيئة:</strong> عند سحب الشبك من الماء، تؤثر قوة الطفو. إن كان الشبك من ألمنيوم أو بلاستيك وبوجود فتحات، فإن الماء يمر من خلاله مما يقلل من مقاومة السحب.</p>
+  </div>
+
+  <div class="section">
+    <h2>أدخل القيم:</h2>
+    <label>نصف قطر البكرة (متر):</label>
+    <input type="number" id="radius" step="0.001">
+
+    <label>الوزن (كغ):</label>
+    <input type="number" id="mass" step="0.1">
+
+    <label>المسافة المطلوبة (متر):</label>
+    <input type="number" id="distance" step="0.01">
+
+    <label>الزمن المطلوب (ثانية):</label>
+    <input type="number" id="time" step="0.1">
+
+    <button onclick="calculate()">احسب</button>
+
+    <div class="result" id="output"></div>
+  </div>
+
+  <div class="section">
+    <h2>المعادلات</h2>
+    <p><strong>السرعة الخطية (v):</strong> المسافة / الزمن</p>
+    <p><strong>السرعة الزاوية (ω):</strong> ω = v / r</p>
+    <p><strong>الـ RPM:</strong> RPM = ω × 60 / 2π</p>
+    <p><strong>القوة:</strong> F = الكتلة × 9.81</p>
+    <p><strong>العزم (Torque):</strong> τ = F × r</p>
+  </div>
+
+  <div class="section">
+    <h2>نصائح واختيارات مهمة</h2>
+    <ul>
+      <li>اجعل نسبة أمان 1.5 إلى 2 من العزم المطلوب.</li>
+      <li>استخدم محرك مع علبة تروس (Gearbox) لخفض RPM وزيادة العزم.</li>
+      <li>كلما كان الشبك مثقّباً، قلت مقاومة الماء عليه أثناء السحب.</li>
+      <li>حاول تقليل نصف قطر البكرة لزيادة القوة، ولكن لا تبالغ لتجنب الضغط على المحرك.</li>
+    </ul>
+  </div>
+
+  <script>
+    function calculate() {
+      const r = parseFloat(document.getElementById('radius').value);
+      const m = parseFloat(document.getElementById('mass').value);
+      const d = parseFloat(document.getElementById('distance').value);
+      const t = parseFloat(document.getElementById('time').value);
+
+      if (isNaN(r) || isNaN(m) || isNaN(d) || isNaN(t) || r <= 0 || t <= 0) {
+        document.getElementById('output').innerHTML = 'يرجى إدخال جميع القيم بشكل صحيح.';
+        return;
+      }
+
+      const g = 9.81;
+      const v = d / t;                  // السرعة الخطية
+      const w = v / r;                  // السرعة الزاوية بالراديان
+      const rpm = w * 60 / (2 * Math.PI); // التحويل إلى RPM
+      const F = m * g;                  // القوة
+      const torque = F * r;             // العزم
+
+      document.getElementById('output').innerHTML =
+        `السرعة الخطية المطلوبة: ${v.toFixed(4)} م/ث<br>
+        السرعة الزاوية (ω): ${w.toFixed(4)} راديان/ث<br>
+        السرعة الدورانية المطلوبة (RPM): ${rpm.toFixed(2)}<br>
+        القوة المطلوبة: ${F.toFixed(2)} نيوتن<br>
+        العزم المطلوب: ${torque.toFixed(3)} نيوتن-متر`;
+    }
+  </script>
+</body>
+</html>

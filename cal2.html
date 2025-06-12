@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>نظام البكرة المائي</title>
+    <style>
+        body {font-family: Arial; margin: 20px; background: #f0f8ff;}
+        .section {background: white; padding: 20px; margin: 10px; border-radius: 10px;}
+        input {margin: 5px; width: 100px;}
+        .note {color: #ff4444; font-weight: bold;}
+    </style>
+</head>
+<body>
+    <!-- الشرح النظري -->
+    <div class="section">
+        <h2>المكونات الأساسية:</h2>
+        <h3>١- البكرة (Pulley):</h3>
+        <p>نصف قطر البكرة (r) يؤثر مباشرة على العزم المطلوب: Torque = r × F</p>
+        
+        <h3>٢- السرعة الدورانية (RPM):</h3>
+        <p>عدد الدورات في الدقيقة، تحسب من المعادلة: RPM = (السرعة الخطية × 60)/(2πr)</p>
+        
+        <h3>٣- العزم (Torque):</h3>
+        <p>قوة الدوران، يحسب من: Torque = r × (الوزن الفعلي - قوة الطفو)</p>
+        
+        <h3>٤- تأثير الطفو:</h3>
+        <p>قوة الطفو = كثافة الماء × حجم الشبك × جاذبية</p>
+        <p>الوزن الفعلي = وزن الشكل في الهواء - قوة الطفو</p>
+    </div>
+
+    <!-- حاسبة المتغيرات -->
+    <div class="section">
+        <h2>إدخال المتغيرات:</h2>
+        نصف قطر البكرة (متر): <input type="number" id="radius" value="0.5"><br>
+        الوزن الكلي (كجم): <input type="number" id="weight" value="100"><br>
+        كثافة الماء (كجم/م³): <input type="number" id="waterDensity" value="1000"><br>
+        حجم الشبك (م³): <input type="number" id="netVolume" value="0.1"><br>
+        عدد المحركات: <input type="number" id="motors" value="1"><br>
+        <button onclick="calculate()">احسب</button>
+    </div>
+
+    <!-- النتائج -->
+    <div class="section" id="results">
+        <h2>النتائج:</h2>
+        <p>الوزن الفعلي: <span id="effectiveWeight">0</span> نيوتن</p>
+        <p>العزم المطلوب: <span id="torque">0</span> نيوتن.متر</p>
+        <p>RPM المقترح: <span id="rpm">0</span> دورة/دقيقة</p>
+    </div>
+
+    <!-- النصائح -->
+    <div class="section">
+        <h2>نصائح تقنية:</h2>
+        <div class="note">
+            <p>• نسبة الأمان الموصى بها: 30% فوق القيمة المحسوبة</p>
+            <p>• كل محرك إضافي يزيد العزم الكلي ولكن قد يقلل RPM</p>
+            <p>• الشبك البلاستيكي أخف ولكن أقل متانة</p>
+            <p>• الفتحات في الشبك تقلل من تأثير الطفو</p>
+        </div>
+    </div>
+
+    <script>
+        const g = 9.81; // الجاذبية
+
+        function calculate() {
+            // قراءة القيم
+            let r = parseFloat(document.getElementById('radius').value);
+            let weight = parseFloat(document.getElementById('weight').value);
+            let waterDensity = parseFloat(document.getElementById('waterDensity').value);
+            let netVolume = parseFloat(document.getElementById('netVolume').value);
+            let motors = parseFloat(document.getElementById('motors').value);
+
+            // حساب الطفو
+            let buoyancyForce = waterDensity * netVolume * g;
+            let effectiveWeight = (weight * g) - buoyancyForce;
+
+            // حساب العزم
+            let torque = r * effectiveWeight / motors;
+
+            // حساب RPM
+            let rpm = (effectiveWeight > 0) ? Math.sqrt((effectiveWeight * 60)/(2 * Math.PI * r)) : 0;
+
+            // عرض النتائج
+            document.getElementById('effectiveWeight').textContent = effectiveWeight.toFixed(2);
+            document.getElementById('torque').textContent = torque.toFixed(2);
+            document.getElementById('rpm').textContent = rpm.toFixed(2);
+        }
+    </script>
+</body>
+</html>

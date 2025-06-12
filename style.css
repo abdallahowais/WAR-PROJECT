@@ -1,0 +1,90 @@
+/* أساسي */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f3f3f3;
+    margin: 0;
+    padding: 0;
+}
+
+/* رأس الصفحة */
+header {
+    background-color: #0077b6;
+    padding: 20px;
+}
+
+header h1 {
+    color: white;
+    margin: 0;
+}
+
+header p {
+    color: white;
+    margin-top: 8px;
+}
+
+/* شريط التنقل */
+nav {
+    background-color: #004a99;
+    padding: 10px 20px;
+}
+
+nav a {
+    color: white;
+    margin-right: 15px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* الحاوية */
+.container {
+    max-width: 700px;
+    margin: 30px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* العناوين */
+h2 {
+    color: #0077b6;
+}
+
+/* الفقرات والقوائم */
+p {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+li {
+    background: #f9f9f9;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 3px rgba(0,0,0,0.1);
+}
+
+/* الروابط */
+a {
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    background-color: #0077b6;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 6px;
+}
+
+a:hover {
+    background-color: #005f8e;
+}
+

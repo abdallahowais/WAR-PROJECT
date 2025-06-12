@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حسابات الموتور والطاقة لرفع الحمل</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            width: 100%;
+        }
+        main {
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+            margin: 20px;
+        }
+        .form-container {
+            width: 60%;
+        }
+        .sidebar {
+            width: 35%;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="number"], input[type="text"], select {
+            padding: 5px;
+            width: 200px;
+            margin-bottom: 10px;
+            margin-top: 5px;
+        }
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .result {
+            margin-top: 20px;
+            background-color: #e2e2e2;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>حسابات الموتور والطاقة لرفع الحمل</h1>
+    </header>
+
+    <main>
+        <!-- إدخال البيانات -->
+        <div class="form-container">
+            <div class="section">
+                <h2>إدخال البيانات</h2>
+                
+                <label for="numMotors">عدد المحركات:</label>
+                <input type="number" id="numMotors" value="1" step="1" placeholder="ادخل عدد المحركات" min="1" />
+
+                <label for="weightMesh">وزن الشبك (بالنيوتن):</label>
+                <input type="number" id="weightMesh" value="23.84" step="0.1" placeholder="ادخل وزن الشبك (نيوتن)" />
+
+                <label for="buoyancyForce">قوة الطفو على الشبك (نيوتن):</label>
+                <input type="number" id="buoyancyForce" value="8.83" step="0.1" placeholder="ادخل قوة الطفو على الشبك (نيوتن)" />
+
+                <label for="apparentWeight">الوزن الظاهري للشبك في الماء (نيوتن):</label>
+                <input type="number" id="apparentWeight" value="15.01" step="0.1" placeholder="ادخل الوزن الظاهري للشبك في الماء (نيوتن)" />
+
+                <label for="extraWeight">الوزن الإضافي الموضوع فوق الشبك (كجم):</label>
+                <input type="number" id="extraWeight" value="10" step="0.1" placeholder="ادخل الوزن الإضافي فوق الشبك (كجم)" />
+
+                <label for="pulleyRadius">نصف قطر البكرة (متر):</label>
+                <input type="number" id="pulleyRadius" value="0.02" step="0.001" placeholder="ادخل نصف قطر البكرة (متر)" />
+
+                <label for="liftingDistance">المسافة المطلوبة للرفع (متر):</label>
+                <input type="number" id="liftingDistance" value="0.4" step="0.01" placeholder="ادخل المسافة المطلوبة للرفع (متر)" />
+
+                <label for="liftingTime">الزمن المطلوب للرفع (ثانية):</label>
+                <input type="number" id="liftingTime" value="30" step="1" placeholder="ادخل الزمن المطلوب للرفع (ثانية)" />
+
+                <button class="button" onclick="calculateMotorSpecs()">حساب</button>
+            </div>
+
+            <div class="section result" id="results">
+                <!-- النتائج ستظهر هنا -->
+            </div>
+        </div>
+
+        <!-- الصندوق الجانبي -->
+        <div class="sidebar">
+            <h3>المعادلات المستخدمة مع شرحها</h3>
+            <ul>
+                <li><strong>الوزن الكلي المراد رفعه:</strong> 
+                    <p>الوزن الكلي الذي يجب رفعه يشمل الوزن الظاهري للشبك في الماء (وزن الشبك بعد خصم قوة الطفو) بالإضافة إلى الوزن الإضافي الموضوع فوق الشبك.</p>
+                    <p><strong>المعادلة:</strong> الوزن الكلي = الوزن الظاهري + الوزن الإضافي × 9.81</p>
+                </li>
+
+                <li><strong>السرعة الخطية:</strong>
+                    <p>السرعة الخطية هي السرعة التي يجب أن يتحرك بها الحبل أو السلك لرفع الشبك عبر المسافة المحددة خلال الزمن المطلوب.</p>
+                    <p><strong>المعادلة:</strong> السرعة = المسافة ÷ الزمن</p>
+                </li>
+
+                <li><strong>محيط البكرة:</strong>
+                    <p>محيط البكرة هو المسافة التي يتحرك بها الحبل أو السلك في كل دورة كاملة للبكرة.</p>
+                    <p><strong>المعادلة:</strong> المحيط = π × القطر</p>
+                </li>
+
+                <li><strong>عدد الدورات:</strong>
+                    <p>عدد الدورات المطلوبة للبكرة لرفع الشبك المسافة المطلوبة. يعتمد على المسافة التي تريد رفعها وحجم البكرة.</p>
+                    <p><strong>المعادلة:</strong> عدد الدورات = المسافة ÷ محيط البكرة</p>
+                </li>
+
+                <li><strong>RPM (دورات في الدقيقة):</strong>
+                    <p>RPM هو عدد الدورات في الدقيقة التي يجب أن يقوم بها الموتور لرفع الشبك بالسرعة المطلوبة.</p>
+                    <p><strong>المعادلة:</strong> RPM = (عدد الدورات ÷ الزمن) × 60</p>
+                </li>
+
+                <li><strong>العزم:</strong>
+                    <p>العزم هو القوة المؤثرة على البكرة والتي تعتمد على الوزن الكلي المراد رفعه ونصف قطر البكرة.</p>
+                    <p><strong>المعادلة:</strong> العزم = القوة × نصف القطر</p>
+                </li>
+
+                <li><strong>حساب العزم المطلوب لكل محرك:</strong>
+                    <p>عند استخدام أكثر من محرك، يتم **توزيع العزم** على **عدد المحركات**. العزم الذي يتحمله كل محرك يُحسب عبر تقسيم العزم الكلي مع هامش الأمان على عدد المحركات.</p>
+                    <p><strong>المعادلة:</strong> 
+                        <br>العزم المطلوب لكل محرك = العزم مع هامش الأمان ÷ عدد المحركات
+                        <br>على سبيل المثال، إذا كان العزم مع هامش الأمان = 3.39 نيوتن متر وكان لدينا 4 محركات:
+                        <br>العزم لكل محرك = 3.39 ÷ 4 = 0.85 نيوتن متر
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </main>
+
+    <script>
+        function calculateMotorSpecs() {
+            // جلب البيانات المدخلة
+            const numMotors = parseInt(document.getElementById("numMotors").value); // عدد المحركات
+            const weightMesh = parseFloat(document.getElementById("weightMesh").value); // وزن الشبك
+            const buoyancyForce = parseFloat(document.getElementById("buoyancyForce").value); // قوة الطفو
+            const apparentWeight = parseFloat(document.getElementById("apparentWeight").value); // الوزن الظاهري
+            const extraWeight = parseFloat(document.getElementById("extraWeight").value); // الوزن الإضافي
+            const pulleyRadius = parseFloat(document.getElementById("pulleyRadius").value); // نصف قطر البكرة
+            const liftingDistance = parseFloat(document.getElementById("liftingDistance").value); // المسافة
+            const liftingTime = parseFloat(document.getElementById("liftingTime").value); // الزمن
+
+            // حساب الوزن الكلي المراد رفعه
+            const totalWeight = apparentWeight + (extraWeight * 9.81); // الوزن الإضافي × تسارع الجاذبية
+
+            // حساب السرعة الخطية
+            const linearSpeed = liftingDistance / liftingTime;
+
+            // حساب محيط البكرة
+            const circumference = Math.PI * (pulleyRadius * 2); // محيط البكرة
+
+            // حساب عدد الدورات المطلوبة
+            const rotations = liftingDistance / circumference;
+
+            // حساب RPM
+            const rpm = (rotations / liftingTime) * 60;
+
+            // حساب العزم المطلوب
+            const torque = totalWeight * pulleyRadius;
+
+            // إضافة هامش الأمان
+            const safetyMargin = 1.5;  // هامش الأمان
+            const torqueWithSafety = torque * safetyMargin;  // العزم مع هامش الأمان
+
+            // حساب العزم المطلوب لكل محرك
+            const torquePerMotor = torqueWithSafety / numMotors;
+
+            // عرض النتائج
+            const result = `
+                <h3>النتائج:</h3>
+                <p>الوزن الكلي المراد رفعه: ${totalWeight.toFixed(2)} نيوتن</p>
+                <p>السرعة الخطية: ${linearSpeed.toFixed(4)} م/ث</p>
+                <p>محيط البكرة: ${circumference.toFixed(4)} متر</p>
+                <p>عدد الدورات المطلوبة: ${rotations.toFixed(2)} دورة</p>
+                <p>الـ RPM المطلوب: ${rpm.toFixed(2)} دورة في الدقيقة</p>
+                <p>العزم المطلوب: ${torque.toFixed(2)} نيوتن متر</p>
+                <p><strong>العزم مع هامش الأمان (1.5):</strong> ${torqueWithSafety.toFixed(2)} نيوتن متر</p>
+                <p><strong>العزم المطلوب لكل محرك (${numMotors} محركات):</strong> ${torquePerMotor.toFixed(2)} نيوتن متر</p>
+            `;
+            document.getElementById("results").innerHTML = result;
+        }
+    </script>
+</body>
+</html>

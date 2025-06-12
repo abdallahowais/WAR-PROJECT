@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حسابات الطفو للشبك</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            width: 100%;
+        }
+        main {
+            display: flex;
+            flex: 1;
+            justify-content: space-between;
+            margin: 20px;
+        }
+        .form-container {
+            width: 60%;
+        }
+        .sidebar {
+            width: 35%;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="number"], input[type="text"], select {
+            padding: 5px;
+            width: 200px;
+            margin-bottom: 10px;
+            margin-top: 5px;
+        }
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .result {
+            margin-top: 20px;
+            background-color: #e2e2e2;
+            padding: 10px;
+        }
+        .equations {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+        .sidebar h3, .sidebar ul {
+            margin: 10px 0;
+        }
+        .sidebar ul {
+            padding-left: 20px;
+        }
+        .sidebar ul li {
+            margin-bottom: 5px;
+        }
+        .convert-box {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+		
+    </style>
+</head>
+<body>
+    <header>
+        <h1>حسابات الطفو للشبك</h1>
+    </header>
+
+    <main>
+        <!-- إدخال البيانات -->
+        <div class="form-container">
+            <div class="section">
+                <h2>إدخال البيانات</h2>
+
+                <label for="density">الكثافة (كجم/م³):</label>
+                <input type="number" id="density" placeholder="ادخل الكثافة" />
+
+                <label for="length">طول الشبك (متر):</label>
+                <input type="number" id="length" placeholder="ادخل الطول" />
+
+                <label for="width">عرض الشبك (متر):</label>
+                <input type="number" id="width" placeholder="ادخل العرض" />
+
+                <label for="height">ارتفاع الشبك (متر):</label>
+                <input type="number" id="height" placeholder="ادخل الارتفاع" />
+
+                <label for="holes">نسبة الفتحات (%):</label>
+                <input type="number" id="holes" placeholder="ادخل نسبة الفتحات" />
+
+                <label for="fluid">نوع السائل:</label>
+                <select id="fluid">
+                    <option value="water">ماء (كثافة 1000 كجم/م³)</option>
+                    <option value="oil">زيت (كثافة 850 كجم/م³)</option>
+                    <option value="other">سائل آخر</option>
+                </select>
+
+                <button class="button" onclick="calculateBuoyancy()">حساب الطفو</button>
+            </div>
+
+            <div class="section result" id="results">
+                <!-- سيتم عرض النتائج هنا بعد الحساب -->
+            </div>
+
+            <div class="section equations">
+                 <h2>المعادلات المستخدمة</h2>
+                <h3>1. حساب الحجم الفعلي:</h3>
+                <p>حجم الشبك الفعلي يُحسب باستخدام المعادلة:</p>
+                <pre>الحجم الفعلي = الحجم الكلي × (1 - نسبة الفتحات)</pre>
+                <p>هذا يعطينا الحجم الفعلي بالـ متر المكعب (م³) الذي يلامس السائل.</p>
+
+                <h3>2. حساب وزن الشبك:</h3>
+                <p>وزن الشبك يُحسب باستخدام المعادلة:</p>
+                <pre>وزن الشبك = الكثافة × الحجم الفعلي</pre>
+                <p>حيث أن الحجم الفعلي يتم تعديله بناءً على نسبة الفتحات.</p>
+                <p>تحويل الوزن من الكتلة إلى النيوتن يتم باستخدام المعادلة التالية:</p>
+                <pre>وزن الشبك بالنيوتن = وزن الشبك بالكجم × 9.81</pre>
+
+                <h3>3. حساب قوة الطفو:</h3>
+                <p>قوة الطفو تُحسب باستخدام المعادلة:</p>
+                <pre>قوة الطفو = كثافة السائل × الحجم الفعلي × تسارع الجاذبية (9.81 م/ث²)</pre>
+            </div>
+
+            <div class="section">
+			 <h2>نصائح</h2>
+            <p>إذا كان وزن الشبك أكبر من قوة الطفو، سيغرق.</p>
+            <p>إذا كانت قوة الطفو أكبر أو تساوي وزن الشبك، سيطفو.</p>
+                <h2>نصائح لجعل الشبك يغرق</h2>
+                <ul>
+                    <li>استخدم مادة ذات كثافة أكبر من الألومنيوم مثل الحديد أو النحاس.</li>
+                    <li>تقليل نسبة الفتحات في الشبك، كلما كانت الفتحات أقل، كلما كان الحجم الفعلي للشبك أكبر.</li>
+                    <li>زيادة سمك الشبك لجعل وزنه أكبر وبالتالي زيادة قوة الجاذبية عليه.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- الصندوق الجانبي -->
+        <div class="sidebar">
+            <h3>أشهر المواد الممكن استخدامها</h3>
+            <ul>
+                <li><b>الألومنيوم:</b> كثافة 2700 كجم/م³، مقاوم للصدأ ولكن قد يتآكل تحت الماء مع مرور الوقت.</li>
+                <li><b>الحديد:</b> كثافة 7800 كجم/م³، يمكن أن يتآكل بسرعة تحت الماء، يحتاج إلى طلاء لحمايته من الصدأ.</li>
+                <li><b>النحاس:</b> كثافة 8960 كجم/م³، لا يتآكل بسرعة ولكنه غالي الثمن.</li>
+                <li><b>الفولاذ المقاوم للصدأ:</b> كثافة 8000-8200 كجم/م³، مقاوم للصدأ بشكل جيد.</li>
+            </ul>
+
+            <div class="convert-box">
+                <h3>تحويلات بسيطة:</h3>
+                <p>1 متر = 100 سنتيمتر</p>
+                <p>1 سنتيمتر = 0.01 متر</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function calculateBuoyancy() {
+            const density = parseFloat(document.getElementById("density").value);
+            const length = parseFloat(document.getElementById("length").value);
+            const width = parseFloat(document.getElementById("width").value);
+            const height = parseFloat(document.getElementById("height").value);
+            const holes = parseFloat(document.getElementById("holes").value) / 100;
+            const fluid = document.getElementById("fluid").value;
+
+            // كثافة السائل حسب الاختيار
+            let fluidDensity = 1000; // الماء افتراضيًا
+            if (fluid === "oil") {
+                fluidDensity = 850; // كثافة الزيت (كجم/م³)
+            } else if (fluid === "other") {
+                fluidDensity = parseFloat(prompt("ادخل كثافة السائل (كجم/م³):"));
+            }
+
+            // حساب الحجم الفعلي مع الفتحات
+            const totalVolume = length * width * height;
+            const effectiveVolume = totalVolume * (1 - holes); // تعديل الحجم بناءً على نسبة الفتحات
+
+            // حساب وزن الشبك (بالنيوتن)
+            const materialWeight = density * effectiveVolume;
+            const materialWeightInNewtons = materialWeight * 9.81; // تحويل الوزن إلى نيوتن
+
+            // حساب قوة الطفو
+            const buoyantForce = fluidDensity * effectiveVolume * 9.81; // تسارع الجاذبية 9.81 م/ث²
+
+            // حساب الوزن الظاهري في الماء
+            const apparentWeight = materialWeightInNewtons - buoyantForce;
+
+            // التحقق من الطفو
+            let resultMessage;
+            if (materialWeightInNewtons > buoyantForce) {
+                resultMessage = "الشبك سيغرق.";
+            } else {
+                resultMessage = "الشبك سيطفو.";
+            }
+
+            // عرض النتائج
+            const result = `
+                <h3>النتائج:</h3>
+                <p>وزن الشبك (بالكتلة): ${materialWeight.toFixed(2)} كجم</p>
+                <p>وزن الشبك (بالنيوتن): ${materialWeightInNewtons.toFixed(2)} نيوتن</p>
+                <p>الوزن الظاهري للشبك في الماء: ${apparentWeight.toFixed(2)} نيوتن</p>
+                <p>قوة الطفو: ${buoyantForce.toFixed(2)} نيوتن</p>
+                <p>${resultMessage}</p>
+            `;
+            document.getElementById("results").innerHTML = result;
+        }
+    </script>
+</body>
+</html>
